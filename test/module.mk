@@ -350,6 +350,7 @@ endif
 ifeq ($(WITH_CMSSM),yes)
 TEST_SRC += \
 		$(DIR)/test_CMSSM_FlexibleDecays.cpp \
+		$(DIR)/test_CMSSM_decays.cpp \
 		$(DIR)/test_CMSSM_effective_couplings.cpp
 endif
 
@@ -902,6 +903,8 @@ $(DIR)/test_CMSSMCKM_tree_level_spectrum.x: \
 	 $(LIBCMSSMCKM)
 
 $(DIR)/test_CMSSMCKM_spectrum.sh: $(RUN_SOFTPOINT_EXE)
+
+$(DIR)/test_CMSSM_decays.x: $(LIBCMSSM)
 
 $(DIR)/test_CMSSM_effective_couplings.x: $(LIBCMSSM)
 
