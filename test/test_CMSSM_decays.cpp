@@ -30,8 +30,11 @@ double hh_to_barFuFu_leading_order(
    const auto m_f = model.get_MFu(gO1);
    const auto M_phi = model.get_Mhh(gI1);
 
-   const auto coup_SM = Sqrt(Sqrt(2.) * G_mu) * m_f;
-   const auto coup = ca * coup_SM / sb;
+   if (M_phi < 2. * m_f) {
+      return 0.;
+   }
+
+   const auto coup = ca / sb;
    const auto beta_f = Sqrt(1. - 4. * m_f * m_f / (M_phi * M_phi));
 
    return N_c * G_mu * Sqr(m_f) * Sqr(coup) * M_phi * Cube(beta_f) /
@@ -56,8 +59,11 @@ double hh_to_barFdFd_leading_order(
    const auto m_f = model.get_MFd(gO1);
    const auto M_phi = model.get_Mhh(gI1);
 
-   const auto coup_SM = Sqrt(Sqrt(2.) * G_mu) * m_f;
-   const auto coup = -sa * coup_SM / cb;
+   if (M_phi < 2. * m_f) {
+      return 0.;
+   }
+
+   const auto coup = -sa / cb;
    const auto beta_f = Sqrt(1. - 4. * m_f * m_f / (M_phi * M_phi));
 
    return N_c * G_mu * Sqr(m_f) * Sqr(coup) * M_phi * Cube(beta_f) /
@@ -79,11 +85,14 @@ double hh_to_barFeFe_leading_order(
 
    const auto sa = Sin(model.Alpha());
 
-   const auto m_f = model.get_MFd(gO1);
+   const auto m_f = model.get_MFe(gO1);
    const auto M_phi = model.get_Mhh(gI1);
 
-   const auto coup_SM = Sqrt(Sqrt(2.) * G_mu) * m_f;
-   const auto coup = -sa * coup_SM / cb;
+   if (M_phi < 2. * m_f) {
+      return 0.;
+   }
+
+   const auto coup = -sa / cb;
    const auto beta_f = Sqrt(1. - 4. * m_f * m_f / (M_phi * M_phi));
 
    return N_c * G_mu * Sqr(m_f) * Sqr(coup) * M_phi * Cube(beta_f) /
@@ -107,8 +116,9 @@ BOOST_AUTO_TEST_CASE( test_CMSSM_hh_to_SM_fermions_leading_order )
 
    CMSSM_mass_eigenstates model(setup_CMSSM(input));
    model.do_calculate_sm_pole_masses(true);
+   model.set_ewsb_loop_order(0);
    model.set_pole_mass_loop_order(0);
-   model.calculate_pole_masses();
+   model.calculate_spectrum();
 
    const auto hh1_to_barFuFu_expected = hh_to_barFuFu_leading_order(
       model, 0, 2);
